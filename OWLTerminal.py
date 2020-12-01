@@ -53,7 +53,7 @@ def serialWrite(Serial):
             if(buffer != ""):
                 now = datetime.now()
                 curentTime = now.strftime("%H:%M:%S.%f")
-                Serial.write((buffer + "\n").encode("UTF-8"))
+                Serial.write((buffer + "\n" + "\r").encode("UTF-8"))
                 sys.stdout.write("\033[F")
                 print(curentTime + colored(" <--", 'red') + " : " + buffer)
                 # print(curentTime + " <-- : " + buffer)
