@@ -1,7 +1,6 @@
 import serial
 from datetime import datetime
 import threading
-import time
 import getpass
 import sys
 from termcolor import colored
@@ -38,13 +37,14 @@ def serialRead(Serial):
             if(bytestoRead != ""):
                 now = datetime.now()
                 curentTime = now.strftime("%H:%M:%S.%f")
-                serialMessage = bytestoRead.decode("utf-8").replace("\n","").replace("\r","")
+                serialMessage = bytestoRead.decode("utf-8").replace("\n", "").replace("\r", "")
                 print(curentTime +  colored(" -->", 'green') + " : " + serialMessage)
                 # print(curentTime + " --> : " + serialMessage)
         except Exception as e:
-            print(str(e)) 
-            exit()       
-                
+            print(str(e))
+            exit()
+
+
 def serialWrite(Serial):
     global pause
     while True:
@@ -58,8 +58,10 @@ def serialWrite(Serial):
                 print(curentTime + colored(" <--", 'red') + " : " + buffer)
                 # print(curentTime + " <-- : " + buffer)
         except Exception as e:
-            print(str(e)) 
+            print(str(e))
             exit()
+
+
 port = ""
 baud = 0
 ports = serial_ports()
@@ -68,7 +70,7 @@ try:
     baud = int(sys.argv[2])
 except:
     pass
-    
+
 if(port == ""):
     for i in range(len(ports)):
         print(str(i) + " : " + str(ports[i]))
@@ -80,7 +82,18 @@ if(port == ""):
         port = input("type port name: ")
 
 if(baud == 0):
-    baud = int(input("baudrate: "))
+    print("0 : 9600 ")
+    print("1 : 57600 ")
+    print("2 : 74880 ")
+    print("3 : 115200 ")
+    print("4 : different speed")
+    baudSpead = [9600, 57600, 74880, 115200]
+    numberBaud = int(input("type baud speed number: "))
+
+    if 4 > numberPort:
+        baud = baudSpead[numberBaud]
+    else:
+        baud = input("type baud speed: ")
 
 
 Serial = serial.Serial()
@@ -93,6 +106,3 @@ serialReadThread = threading.Thread(target=serialRead, args=(Serial,))
 serialWriteThread = threading.Thread(target=serialWrite, args=(Serial,))
 serialReadThread.start()
 serialWriteThread.start()
-
-    
-        
